@@ -1,71 +1,155 @@
-📄 ResumeAI – AI-Powered Resume Analyzer
+# 📄 ResumeAI — AI-Powered Resume Intelligence Platform
 
-ResumeAI is a full-stack AI application that analyzes resumes, matches them with job descriptions, rewrites bullet points, and provides recruiter-level feedback using AI.
+ResumeAI is a full-stack AI application that analyzes resumes, matches them with job descriptions, rewrites content, and provides recruiter-level insights using modern LLM-powered pipelines.
 
-🚀 Features
-📊 Resume analysis with detailed scoring (ATS, skills, experience, etc.)
-🧠 AI-powered feedback (strengths, weaknesses, improvements)
-🔍 Job matching against real job descriptions
-✍️ Resume bullet point rewriter
-📈 Admin analytics dashboard
-☁️ Resume storage via Cloudinary
-🔐 Admin authentication with JWT
-🧠 How the System Works (Beginner Explanation)
-📄 Resume Analysis Flow
-User uploads a resume (PDF)
-Backend:
-Extracts text using pdf-parse
-Sends text to AI (Groq)
-AI returns structured JSON:
-Scores
-Strengths & weaknesses
-Missing keywords
-Backend:
-Saves analytics to DB
-Uploads file to Cloudinary
-Frontend displays:
-Score breakdown
-Resume preview
-Improvements
+Built to simulate **real-world ATS systems and hiring workflows**.
 
-👉 Core logic:
+---
 
-🔍 Job Matcher Flow
-Upload resume + paste job description
-Backend:
-Extracts resume text
-Sends both to AI
-AI compares:
-Matching skills
-Missing skills
-Match score
-✍️ Resume Rewriter Flow
-User inputs weak bullet point
-AI rewrites it with:
-Strong action verbs
-Metrics
-Impact
-📊 Admin Dashboard
-Total analyses
-Average scores
-Keyword trends
-Role distribution
-Recent activity
+## 🚀 Features
 
-👉 Protected using JWT admin auth
+### 📊 Resume Analysis
 
-🔐 Admin Authentication
-Username & password from .env
-Generates JWT token
-Stored in sessionStorage
+* AI-powered scoring across:
 
-Example:
+  * ATS compatibility
+  * Skills relevance
+  * Experience strength
+  * Resume structure
+  * Keyword optimization
+* Generates structured evaluation with actionable insights
 
-sessionStorage.setItem("admin_token", token)
-⚙️ Environment Variables
+---
 
-Create .env inside backend:
+### 🧠 AI Feedback Engine
 
+* Detailed:
+
+  * Strengths
+  * Weaknesses
+  * Improvement suggestions
+* Mimics recruiter-style feedback
+
+---
+
+### 🔍 Job Matching System
+
+* Compare resume against job descriptions
+* Outputs:
+
+  * Match percentage
+  * Missing skills
+  * Relevant overlaps
+* Helps tailor resumes for specific roles
+
+---
+
+### ✍️ Resume Bullet Rewriter
+
+* Converts weak bullet points into strong ones
+* Adds:
+
+  * Action verbs
+  * Quantifiable impact
+  * Professional tone
+
+---
+
+### 📈 Admin Analytics Dashboard
+
+* Track platform usage:
+
+  * Total analyses
+  * Average scores
+  * Keyword trends
+  * Role distribution
+* Real-time insights into resume data
+
+---
+
+### ☁️ Cloud Storage
+
+* Upload resumes securely
+* Stored using Cloudinary
+* Instant preview via hosted URLs
+
+---
+
+### 🔐 Admin Authentication
+
+* JWT-based authentication system
+* Secure admin dashboard access
+
+---
+
+## 🧠 System Architecture (How It Works)
+
+This app follows an **AI processing pipeline**:
+
+### 📄 Resume Analysis Flow
+
+1. User uploads resume (PDF)
+2. Backend:
+
+   * Extracts text using `pdf-parse`
+   * Sends content to LLM (Groq)
+3. AI returns structured JSON:
+
+   * Scores
+   * Keywords
+   * Feedback
+4. Backend:
+
+   * Stores analytics in PostgreSQL
+   * Uploads file to Cloudinary
+5. Frontend displays:
+
+   * Score breakdown
+   * Resume preview
+   * Improvement suggestions
+
+---
+
+### 🔍 Job Matching Flow
+
+1. User uploads resume + job description
+2. Backend extracts resume text
+3. AI compares:
+
+   * Matching skills
+   * Missing skills
+   * Overall compatibility
+4. Returns match score + insights
+
+---
+
+### ✍️ Resume Rewriter Flow
+
+1. User inputs weak bullet point
+2. AI rewrites using:
+
+   * Strong verbs
+   * Metrics
+   * Business impact
+
+---
+
+### 📊 Analytics Flow
+
+* Stores every analysis in DB
+* Aggregates:
+
+  * Scores
+  * Trends
+  * Role insights
+
+---
+
+## ⚙️ Environment Variables
+
+Create `.env` inside backend:
+
+```env id="env1"
 PORT=8080
 
 GROQ_API_KEY=
@@ -84,31 +168,61 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin@123
 
 JWT_SECRET=
-🛠️ How to Run the Project
-1️⃣ Backend
-cd backend
-npm install
-npm run dev
+```
 
-Runs on:
+---
 
-http://localhost:8080
-2️⃣ Frontend
-cd frontend
-npm install
-npm run dev
+## 🔑 API Key Setup Guide
 
-Runs on:
+### ⚡ Groq (REQUIRED)
 
-http://localhost:5173
-🗄️ Database Setup (PostgreSQL)
+Used for:
 
-Create database:
+* Resume analysis
+* Job matching
+* Bullet rewriting
 
+Steps:
+
+1. Go to https://console.groq.com
+2. Create API key
+3. Add to `.env`
+
+```env id="groq"
+GROQ_API_KEY=your_key_here
+```
+
+---
+
+### ☁️ Cloudinary (REQUIRED)
+
+Used for:
+
+* Resume storage
+* File hosting
+
+Steps:
+
+1. Go to https://cloudinary.com
+2. Copy credentials from dashboard
+
+```env id="cloud"
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+---
+
+### 🗄 PostgreSQL (Database)
+
+#### Local Setup
+
+```sql id="sql1"
 CREATE DATABASE resumeai;
+```
 
-Create table:
-
+```sql id="sql2"
 CREATE TABLE analyses (
   id SERIAL PRIMARY KEY,
   overall_score INT,
@@ -122,126 +236,192 @@ CREATE TABLE analyses (
   missing_keywords TEXT[],
   created_at TIMESTAMP DEFAULT NOW()
 );
-🔑 How to Get API Keys (Step-by-Step)
-🧠 1. Groq API (REQUIRED)
+```
 
-Used for:
+#### Cloud (Recommended)
 
-Resume analysis
-Job matching
-Resume rewriting
-Steps:
-Go to 👉 https://console.groq.com
-Sign up / login
-Click API Keys
-Click Create API Key
-Copy key
+* Neon → https://neon.tech
+* Supabase → https://supabase.com
 
-Add to .env:
+---
 
-GROQ_API_KEY=your_key_here
-☁️ 2. Cloudinary (REQUIRED for file uploads)
+### 🔐 JWT Secret
 
-Used for:
-
-Storing uploaded resumes
-Serving resume preview URLs
-Steps:
-Go to 👉 https://cloudinary.com
-Sign up
-Go to Dashboard
-
-You’ll see:
-
-Cloud Name
-API Key
-API Secret
-
-Add to .env:
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-🗄️ 3. PostgreSQL (Database)
-
-You can use:
-
-Option A: Local PostgreSQL
-Install PostgreSQL
-Create DB (resumeai)
-Use credentials
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_password
-Option B: Cloud DB (Recommended)
-
-Use:
-
-Neon (https://neon.tech
-)
-Supabase (https://supabase.com
-)
-
-They give:
-
-Host
-User
-Password
-DB name
-🔐 4. JWT Secret
-
-Used for:
-
-Admin authentication
-Generate:
+```bash id="jwt"
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-Add:
-
+```env id="jwt2"
 JWT_SECRET=your_secret_here
-🔐 5. Admin Credentials
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=admin@123
+```
 
-Login page:
+---
 
-http://localhost:5173/admin/login
-📦 Key Backend Concepts
-✅ File Upload + Parsing
-multer → save file → pdf-parse → extract text
-✅ Cloudinary Upload
+## 🛠 Installation & Setup
+
+### 1. Clone Repository
+
+```bash id="clone"
+git clone https://github.com/your-username/resume-ai.git
+cd resume-ai
+```
+
+---
+
+### 2. Backend Setup
+
+```bash id="backend"
+cd backend
+npm install
+npm run dev
+```
+
+Runs on:
+
+```bash id="backend-url"
+http://localhost:8080
+```
+
+---
+
+### 3. Frontend Setup
+
+```bash id="frontend"
+cd frontend
+npm install
+npm run dev
+```
+
+Runs on:
+
+```bash id="frontend-url"
+http://localhost:5173
+```
+
+---
+
+## 🔌 API Overview
+
+### Resume Analysis
+
+* `POST /analyze` → Analyze resume
+
+### Job Matching
+
+* `POST /match` → Compare resume with job description
+
+### Resume Rewriting
+
+* `POST /rewrite` → Improve bullet points
+
+### Admin
+
+* `POST /admin/login`
+* `GET /admin/stats`
+
+---
+
+## 🧩 Core Backend Concepts
+
+### 📄 File Processing
+
+* Uses `multer` for uploads
+* Uses `pdf-parse` for text extraction
+
+---
+
+### ☁️ Cloud Upload
+
+```js id="cloudinary"
 cloudinary.uploader.upload(filePath)
+```
 
 Returns:
 
-secure_url (used in frontend)
-✅ AI Processing
+* `secure_url` → used in frontend
 
-All AI calls go through:
+---
 
+### 🧠 AI Integration
+
+* Uses Groq API:
+
+```
 https://api.groq.com/openai/v1/chat/completions
-✅ Error Handling (Important)
+```
 
-Your code:
+---
 
-Cleans AI response
-Parses JSON safely
-Validates required fields
+### ⚠️ Error Handling (Production Level)
 
-This is production-level robustness
+* Cleans AI responses
+* Safely parses JSON
+* Validates required fields
 
-🧪 Common Issues & Fixes
-❌ File not uploading
-Check multer config
-Check file size
-❌ AI not responding
-Invalid GROQ_API_KEY
-Check backend logs
-❌ Resume parsing fails
-Ensure PDF is text-based (not scanned)
-❌ Cloudinary upload fails
-Wrong API keys
-Check .env
-❌ Admin login not working
-Check username/password in .env
+---
+
+## ⚡ UX Highlights
+
+* ⚡ Instant resume scoring
+* 🎯 Real-time job matching
+* ✍️ One-click bullet rewriting
+* 📊 Visual analytics dashboard
+* 📄 Resume preview via cloud storage
+
+---
+
+## 🚀 Future Enhancements
+
+* 📄 Resume ATS simulation (real parser scoring)
+* 🧠 Multi-role job matching
+* 📊 Advanced analytics (graphs & trends)
+* 📁 Resume version tracking
+* 🤖 Personalized AI career coach
+* 🌐 Deployment (Docker + CI/CD)
+
+---
+
+## 🐛 Common Issues
+
+### ❌ File upload fails
+
+✔ Check:
+
+* multer config
+* file size limits
+
+---
+
+### ❌ AI not responding
+
+✔ Check:
+
+* GROQ_API_KEY
+* backend logs
+
+---
+
+### ❌ Resume parsing fails
+
+✔ Ensure:
+
+* PDF is text-based (not scanned)
+
+---
+
+### ❌ Cloudinary upload fails
+
+✔ Check:
+
+* API keys in `.env`
+
+---
+
+### ❌ Admin login not working
+
+✔ Verify:
+
+* ADMIN_USERNAME
+* ADMIN_PASSWORD
+
+
