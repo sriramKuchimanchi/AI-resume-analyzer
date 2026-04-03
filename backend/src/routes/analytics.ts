@@ -4,9 +4,9 @@ import { requireAdmin } from "../middleware/authMiddleware"
 
 const router = express.Router()
 
-{/*  get method  */}
 
-router.get("/", requireAdmin, async (req, res) => {
+
+router.get("/", requireAdmin,  async (req, res) => {
   try {
     const totalRes = await pool.query("SELECT COUNT(*) FROM analyses")
     const total = Number(totalRes.rows[0].count)

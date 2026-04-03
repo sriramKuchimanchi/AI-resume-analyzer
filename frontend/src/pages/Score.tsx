@@ -160,8 +160,8 @@ export default function Score() {
   ]
 
   const tools = [
-    { id: "jobmatcher", label: "Job Matcher", icon: "💼" },
-    { id: "rewriter", label: "Resume Rewriter", icon: "✏️" },
+    { id: "jobmatcher", label: "Job Matcher", icon: "" },
+    { id: "rewriter", label: "Resume Rewriter", icon: "" },
   ]
 
   const sidebarBtn = (id: string, label: string, icon?: string) => {
