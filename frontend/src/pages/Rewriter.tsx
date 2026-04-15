@@ -1,68 +1,75 @@
-import { useState } from "react"
-import axios from "axios"
-import { Card, CardContent } from "../components/ui/card"
-import { Button } from "../components/ui/button"
-import { Textarea } from "../components/ui/textarea"
-import Toast from "../components/Toast"
-import AnalyzingLoader from "../components/AnalyzingLoader"
+import { useState } from "react";
+import axios from "axios";
+import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Textarea } from "../components/ui/textarea";
+import Toast from "../components/Toast";
+import AnalyzingLoader from "../components/AnalyzingLoader";
 
 export default function Rewriter() {
-
-  const [bullet, setBullet] = useState("")
-  const [role, setRole] = useState("")
-  const [result, setResult] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [copied, setCopied] = useState(false)
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null)
+  const [bullet, setBullet] = useState("");
+  const [role, setRole] = useState("");
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   const handleRewrite = async () => {
     if (!bullet.trim()) {
-      setError("Please enter a bullet point to rewrite.")
-      return
+      setError("Please enter a bullet point to rewrite.");
+      return;
     }
 
     try {
-      setError("")
-      setResult(null)
-      setLoading(true)
+      setError("");
+      setResult(null);
+      setLoading(true);
 
       const res = await axios.post("http://localhost:8080/rewrite", {
         bullet: bullet.trim(),
         role: role.trim(),
-      })
+      });
 
-      setResult(res.data)
-
+      setResult(res.data);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Rewrite failed. Please try again.")
-      setToast({ message: "Rewrite failed. Please try again.", type: "error" })
+      setError(
+        err.response?.data?.error || "Rewrite failed. Please try again.",
+      );
+      setToast({ message: "Rewrite failed. Please try again.", type: "error" });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleCopy = () => {
-    if (!result?.rewritten) return
-    navigator.clipboard.writeText(result.rewritten)
-    setCopied(true)
-    setToast({ message: "Copied to clipboard!", type: "success" })
-    setTimeout(() => setCopied(false), 2000)
-  }
+    if (!result?.rewritten) return;
+    navigator.clipboard.writeText(result.rewritten);
+    setCopied(true);
+    setToast({ message: "Copied to clipboard!", type: "success" });
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleRegenerate = () => {
-    setResult(null)
-    handleRewrite()
-  }
+    setResult(null);
+    handleRewrite();
+  };
 
   return (
     <div className="min-h-screen bg-white">
       {loading && <AnalyzingLoader />}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
 
       <div className="max-w-2xl mx-auto py-20 px-6 space-y-8">
-
-        
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Resume Rewriter</h1>
           <p className="text-muted-foreground text-sm">
@@ -70,19 +77,20 @@ export default function Rewriter() {
           </p>
         </div>
 
-    
         <Card className="border border-gray-100 shadow-sm">
           <CardContent className="p-8 space-y-5">
-            <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Your bullet point</p>
+            <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+              Your bullet point
+            </p>
 
             <Textarea
               placeholder='e.g. "Worked on the company website" or "Helped with customer support"'
               className="min-h-28 resize-none text-sm leading-relaxed"
               value={bullet}
               onChange={(e) => {
-                setBullet(e.target.value)
-                setError("")
-                setResult(null)
+                setBullet(e.target.value);
+                setError("");
+                setResult(null);
               }}
               maxLength={300}
             />
@@ -91,10 +99,12 @@ export default function Rewriter() {
               <span>{bullet.length}/300 characters</span>
             </div>
 
-        
             <div className="space-y-1.5">
               <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-                Your role <span className="font-normal normal-case">(optional but improves results)</span>
+                Your role{" "}
+                <span className="font-normal normal-case">
+                  (optional but improves results)
+                </span>
               </p>
               <input
                 type="text"
@@ -117,32 +127,40 @@ export default function Rewriter() {
           </CardContent>
         </Card>
 
-        
         {result && (
           <div className="space-y-4">
-
-            
             <div className="grid grid-cols-2 gap-4">
               <Card className="border border-gray-100 shadow-sm">
                 <CardContent className="p-6 space-y-3">
-                  <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Before</p>
-                  <p className="text-sm text-gray-500 leading-relaxed italic">"{bullet}"</p>
+                  <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                    Before
+                  </p>
+                  <p className="text-sm text-gray-500 leading-relaxed italic">
+                    "{bullet}"
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="border border-gray-100 shadow-sm">
                 <CardContent className="p-6 space-y-3">
-                  <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">After</p>
-                  <p className="text-sm text-gray-800 leading-relaxed font-medium">"{result.rewritten}"</p>
+                  <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                    After
+                  </p>
+                  <p className="text-sm text-gray-800 leading-relaxed font-medium">
+                    "{result.rewritten}"
+                  </p>
                 </CardContent>
               </Card>
             </div>
 
-            
             <Card className="border border-gray-100 shadow-sm">
               <CardContent className="p-6 space-y-4">
-                <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">What was improved</p>
-                <p className="text-sm text-gray-600 leading-relaxed">{result.explanation}</p>
+                <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                  What was improved
+                </p>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {result.explanation}
+                </p>
                 <ul className="space-y-2">
                   {result.improvements.map((imp: string, i: number) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
@@ -154,7 +172,6 @@ export default function Rewriter() {
               </CardContent>
             </Card>
 
-        
             <div className="flex gap-3">
               <Button
                 className="flex-1 bg-black text-white hover:bg-black"
@@ -171,29 +188,32 @@ export default function Rewriter() {
                 Regenerate
               </Button>
             </div>
-
           </div>
         )}
 
-        
         {!result && (
           <div className="grid grid-cols-3 text-center pt-4 text-sm gap-8">
             <div>
               <p className="font-semibold tracking-wide">ACTION VERBS</p>
-              <p className="text-muted-foreground mt-1">Every bullet starts with a strong past-tense verb</p>
+              <p className="text-muted-foreground mt-1">
+                Every bullet starts with a strong past-tense verb
+              </p>
             </div>
             <div>
               <p className="font-semibold tracking-wide">METRICS</p>
-              <p className="text-muted-foreground mt-1">Adds realistic numbers and impact where possible</p>
+              <p className="text-muted-foreground mt-1">
+                Adds realistic numbers and impact where possible
+              </p>
             </div>
             <div>
               <p className="font-semibold tracking-wide">ATS READY</p>
-              <p className="text-muted-foreground mt-1">Optimized for applicant tracking systems</p>
+              <p className="text-muted-foreground mt-1">
+                Optimized for applicant tracking systems
+              </p>
             </div>
           </div>
         )}
-
       </div>
     </div>
-  )
+  );
 }
